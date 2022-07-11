@@ -4,16 +4,45 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script  type="text/javascript" src="canvas.js"></script>
+    <link rel="stylesheet" href="style/workspace.css">
+    <script  type="text/javascript" src="script/canvas.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js" integrity="sha512-9mpsATI0KClwt+xVZfbcf2lJ8IFBAwsubJ6mI3rtULwyM3fBmQFzj0It4tGqxLOGQwGfJdk/G+fANnxfq9/cew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
        
     </script>
+    <style>
+        /* .MenuBar{
+    height:30px;
+    background-color: red;
+} */
+    </style>
     <title>WHiteBoard</title>
 </head>
-<body onload="Draw(); " >
-   <canvas id="canvas">
-       cf
+<div class="MenuBar">
+    <button onclick="getSelector('Pen')"> <img src="icon/pen-blue.svg" width="30"></button>
+    <button onclick="getSelector('eraser')">  <img src="icon/eraser-blue.svg" width="30"></button>
+    <div class="penColor" style="display: inline;">
+        <button onclick="setPenColor('red')"> R</button>
+        <button onclick="setPenColor('blue')">B </button>
+        <button onclick="setPenColor('green')">G </button>
+    </div>
+<body onload="Draw() " class="body" >
+   
+         <!-- <button onclick="loadImg()"> img</button>
+        <input type="file" src="" name="image" id="img"> -->
+
+        <button onclick="undo()">undo</button>
+        <button onclick="redo()">redo</button>
+        <button onclick="document.querySelector('.body').requestFullscreen({ navigationUI: 'show' }).then(function() {
+            
+        })
+        .catch(function(error) {
+            
+        });">  <img src="icon/fullscreen-blue.svg" width="30" ></button>
+       
+    </div>
+   <canvas id="canvas" class=".body">
    </canvas> 
    
 </body>

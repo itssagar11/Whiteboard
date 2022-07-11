@@ -1,0 +1,22 @@
+body{
+    overflow:hidden ;
+    width: auto;
+    height: auto;
+    border: 1px solid red;
+   
+   
+    
+}
+.MenuBar{
+    height:auto;
+    width:45px;
+    margin-top: 80px;
+    margin-left: -7px;
+    box-sizing:border-box;
+    padding: 5px;
+    background-color: #bfbfbf;
+    border-bottom: 1px solid black;
+    position: fixed;
+
+}
+
