@@ -1,21 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style/workspace.css">
-    <script type="text/javascript" src="script/canvas.js"></script>
-    <script type="text/javascript" src="script/workspace.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"
-        integrity="sha512-9mpsATI0KClwt+xVZfbcf2lJ8IFBAwsubJ6mI3rtULwyM3fBmQFzj0It4tGqxLOGQwGfJdk/G+fANnxfq9/cew=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@1,700&family=Edu+NSW+ACT+Foundation:wght@600&family=Edu+VIC+WA+NT+Beginner:wght@500&display=swap" rel="stylesheet">
+    <script  type="text/javascript" src="script/canvas.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js" integrity="sha512-9mpsATI0KClwt+xVZfbcf2lJ8IFBAwsubJ6mI3rtULwyM3fBmQFzj0It4tGqxLOGQwGfJdk/G+fANnxfq9/cew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-
+       
     </script>
     <style>
         /* .MenuBar{
@@ -25,73 +19,31 @@
     </style>
     <title>WHiteBoard</title>
 </head>
-
-<body onload="Draw() " class="body">
-    <div class="shr-container">
-        <button onclick="openLink('eraser')"> <img src="icon/settings.png" width="25"> </button>
-        <button onclick="getSelector('eraser')"> <img src="icon/cloud-computing.png" width="25"> </button>
-        <button class="share" onclick="openLink()">Share</button>
-
+<div class="MenuBar">
+    <button onclick="getSelector('Pen')"> <img src="icon/pen-blue.svg" width="30"></button>
+    <button onclick="getSelector('eraser')">  <img src="icon/eraser-blue.svg" width="30"></button>
+    <div class="penColor" style="display: inline;">
+        <button onclick="setPenColor('red')"> R</button>
+        <button onclick="setPenColor('blue')">B </button>
+        <button onclick="setPenColor('green')">G </button>
     </div>
-    <!-- link -->
-    <div class="shr-container link" id="link">
-        <button onclick="closelink()"><img src="icon/close.png" width="15"></button>
-        <h3> WhiteBoard is batter when You are together</h3>
-        <input type="text" class="link-shr">
-        <p>Share this link with other people</p>
-    </div>
-    <div class="MenuBar">
-        <button onclick="getSelector('curser')"> <img src="icon/cursor.png" width="25"></button><br>
-        <button onclick="getSelector('pen')"> <img src="icon/signature.png" width="25"></button><br>
-        <button onclick="getSelector('eraser')"> <img src="icon/eraser.png" width="25"></button><br>
-        <button onclick="getSelector('marker')"> <img src="icon/marker.png" width="25"></button><br>
-        <button onclick="impInp()"><img src="icon/text.png" width="20"></button><br>
-        <!-- <div class="penColor" style="display: inline;">
-            <button onclick="setPenColor('red')"> R</button><br>
-            <button onclick="setPenColor('blue')">B </button><br>
-            <button onclick="setPenColor('green')">G </button><br>
-        </div><br>
-         -->
-       <!-- // <button onclick="loadImg()"> img</button> -->
-       <!-- // <form runat="server"> -->
-            <!-- <input accept="image/*" type='file' id="imgInp"  onchange="impInp(this)" /><br> -->
-           <!-- // <img id="blah" src="#" alt="your image" /> -->
-          <!-- </form> -->
-          <label class="custom-file-upload">
-            <input accept="image/*" type='file' id="imgInp"  onchange="impInp(this)" /><br>
-            <img src="icon/add-image.png" width="25" style="margin-left: 10px;">
-        </label><br>
-        <button onclick="undo()"><img src="icon/undo.png" width="25"></button><br>
-        <button onclick="redo()"><img src="icon/redo.png" width="25"></button><br>
+<body onload="Draw() " class="body" >
+   
+         <!-- <button onclick="loadImg()"> img</button>
+        <input type="file" src="" name="image" id="img"> -->
+
+        <button onclick="undo()">undo</button>
+        <button onclick="redo()">redo</button>
         <button onclick="document.querySelector('.body').requestFullscreen({ navigationUI: 'show' }).then(function() {
             
         })
         .catch(function(error) {
             
-        });"> <img src="icon/full-size.png" width="25"></button><br>
-    <button onclick="more()"><img src="icon/right-arrow.png" width="25"></button><br>
+        });">  <img src="icon/fullscreen-blue.svg" width="30" ></button>
+       
     </div>
-    <div class=" MenuBar pen-sub-menu" id="pen-sub-menu">
-        <button class=""><img src="icon/close.png" width="20" onclick="PenMenuClose()"></button>
-        <input type="color" class="color" id="color">
-        <input type="range" class="thickness" id="thickness" value="10">
-        
-    </div>
-
-
-
-
-    <!-- footer -->
-    <div class="license-container contribute">
-        <img src="icon/github.png" width="25"> 
-        A Project For Semestor Evaluation GEU- Developed by <i>@SagarBisht</i>
-    </div>
+   <canvas id="canvas" class=".body">
+   </canvas> 
    
-    <canvas id="canvas" class=".body">
-        
-    </canvas>
-   
-
 </body>
-
 </html>
