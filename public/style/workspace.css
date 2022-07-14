@@ -1,22 +1,142 @@
-body{
-    overflow:hidden ;
+body {
+    overflow: auto;
     width: auto;
     height: auto;
-    border: 1px solid red;
-   
-   
-    
+    background-color: #F2F2F2;
+
+
+
 }
-.MenuBar{
-    height:auto;
-    width:45px;
+
+.MenuBar {
+    display: inline-block;
+    height: auto;
+    width: auto;
     margin-top: 80px;
-    margin-left: -7px;
-    box-sizing:border-box;
+    margin-left: 2px;
+    box-sizing: border-box;
+    border-radius: 5px;
     padding: 5px;
-    background-color: #bfbfbf;
-    border-bottom: 1px solid black;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     position: fixed;
+    padding: 10px;
 
 }
+.pen-sub-menu{
+    display: none;
+    margin-left: 90px;
+    box-shadow:none;
+    border-radius: 1px;
+}
+.shr-container{
+    height: 60px;
+    display: inline-block;
+    width: 200px;
+    margin-top: 2px;
+    margin-left: 85%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 1px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    position: fixed;
+    padding: 10px;
+}
+.link{
+    display: none;
+    box-shadow: none;
+    height: auto;
+    border-radius: 1px;
+    border: 1px solid rgb(72, 72, 72);
+    margin-top: 80px;
+    transition: width 2s;
+    transition-delay: 1s;
+   
+}
 
+h3{
+    
+    font-family: 'Albert Sans', sans-serif;
+    font-family: 'Edu NSW ACT Foundation', cursive;
+    font-family: 'Edu VIC WA NT Beginner', cursive;
+    text-align: center;
+}
+.license-container{
+    height: auto;
+    width: auto;
+  
+    margin-bottom: -2px;  margin-left: 50%;
+    box-sizing: border-box;
+    border-radius: 1px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+   
+    padding: 2px;
+    background-color: #ffffff;
+    position: fixed;
+    padding: 10px;
+    bottom: 8px;
+} 
+.contribute{
+    margin-left: 1%;
+}
+.icon{
+    width:20px;
+    height:20px;
+}
+button{
+    -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 1.4s;
+    border: none;
+    background-color: #ffffff;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+button:hover{
+    content: "";
+  
+  
+   
+    border-bottom: 1px solid black;
+    opacity: 0.5;
+    transition: all 0.8s
+}
+
+.share{
+    background-color: #4262FF; 
+    border: none;
+    padding: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+  
+    border-radius: 5px;
+    color:#ffffff;
+    font-size: 16px;
+}
+.thickness{
+    
+    border: 1px solid rgba(246, 249, 207, 0.016);
+    color: black;
+    -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+.color{
+   border: none;
+   background-color:white ;
+   border-radius: 50%;
+   width: 30px;
+   height: 30px;
+   border: 1px solid black;
+}
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+   
+    -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 1.4s;
+    border: none;
+    background-color: #ffffff;
+    margin-top: 10px;
+    margin-left: 5px;
+}
