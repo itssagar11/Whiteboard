@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style/workspace.css">
     <script type="text/javascript" src="script/canvas.js"></script>
     <script type="text/javascript" src="script/workspace.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"
-        integrity="sha512-9mpsATI0KClwt+xVZfbcf2lJ8IFBAwsubJ6mI3rtULwyM3fBmQFzj0It4tGqxLOGQwGfJdk/G+fANnxfq9/cew=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="script/socket.io.js" type="text/javascript"
+   ></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@1,700&family=Edu+NSW+ACT+Foundation:wght@600&family=Edu+VIC+WA+NT+Beginner:wght@500&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
 <body onload="Draw() " class="body">
     <div class="shr-container">
         <button onclick="openLink('eraser')"> <img src="icon/settings.png" width="25"> </button>
-        <button onclick="getSelector('eraser')"> <img src="icon/cloud-computing.png" width="25"> </button>
+        <button onclick="downloadCanvasAsImage()"> <img src="icon/cloud-computing.png" width="25"> </button>
         <button class="share" onclick="openLink()">Share</button>
 
     </div>
@@ -41,11 +41,14 @@
         <p>Share this link with other people</p>
     </div>
     <div class="MenuBar">
-        <button onclick="getSelector('curser')"> <img src="icon/cursor.png" width="25"></button><br>
-        <button onclick="getSelector('pen')"> <img src="icon/signature.png" width="25"></button><br>
-        <button onclick="getSelector('eraser')"> <img src="icon/eraser.png" width="25"></button><br>
-        <button onclick="getSelector('marker')"> <img src="icon/marker.png" width="25"></button><br>
-        <button onclick="getSelector('text')"><img src="icon/text.png" width="25"></button><br>
+        <button onclick="getSelector('curser')"> <img src="icon/cursor.png"  class="tool"></button><br>
+        <button onclick="getSelector('pen')"> <img src="icon/signature.png" class="tool"></button><br>
+        <button onclick="getSelector('eraser')"> <img src="icon/eraser.png"  class="tool"></button><br>
+        <button onclick="getSelector('marker')"> <img src="icon/marker.png" class="tool"></button><br>
+        <button onclick="getSelector('rect')"> <img src="icon/square.png" class="tool"></button><br>
+        <button onclick="getSelector('line')"> <img src="icon/nodes.png" class="tool"></button><br>
+        
+        <button onclick="getSelector('text')"><img src="icon/text.png"  class="tool"></button><br>
           <!-- <label class="custom-file-upload">
             <input accept="image/*" type='file' id="imgInp"  onchange="impInp(this)" /><br>
             <img src="icon/add-image.png" width="25" style="margin-left: 10px;">
@@ -57,8 +60,8 @@
         })
         .catch(function(error) {
             
-        });"> <img src="icon/full-size.png" width="25"></button><br>
-    <button onclick="more()"><img src="icon/right-arrow.png" width="25"></button><br>
+        });"> <img src="icon/full-size.png" class="tool"></button><br>
+    <button onclick="more()"><img src="icon/right-arrow.png"class="tool"></button><br>
     </div>
     <div class=" MenuBar sub-menu" id="sub-menu">
         <button class=""><img src="icon/close.png" width="20" onclick="subMenuClose()"></button><br>

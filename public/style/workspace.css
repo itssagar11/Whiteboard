@@ -4,12 +4,13 @@ body {
     height: auto;
     background-color: #F2F2F2;
     
-
+   
 
 
 }
 canvas{
-    border: 2px solid red;
+  background-color: #F2F2F2;
+  cursor: url("https://cdn2.iconfinder.com/data/icons/delivery-services-4/128/_click_online_shop_pointer_clicker_cursor_arrow_online_order_online_shop-512.png") 15 15, crosshair;
 }
 .MenuBar {
     display: inline-block;
@@ -38,7 +39,9 @@ canvas{
     display: inline-block;
     width: 200px;
     margin-top: 2px;
-    margin-left: 85%;
+    position: sticky;
+    left:80%;
+    margin-right: 10px;
     box-sizing: border-box;
     border-radius: 5px;
     padding: 1px;
@@ -150,6 +153,14 @@ input[type="file"] {
     margin-top: 10px;
     margin-left: 5px;
 }
+.tool{
+    width: 25px;
+}
 .textarea{
    background-color: #F2F2F2;
-}
+}@media only screen and (max-width: 600px) {
+    .tool{
+        width: 50px;
+        position: sticky;
+    }
+  }

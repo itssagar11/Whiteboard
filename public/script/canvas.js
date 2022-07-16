@@ -1,17 +1,20 @@
-// globle Variables
+// globle Variable
+
 let workState = 0;
 let canvas;
 let tool = "pen";
 let penColor = "Black";
 let penWidth = 1;
-let erasorWidth = 20;
+let erasorWidth = 50;
 let currentX = 0;
 let currentY = 0;
 let img
 let draggable = false;
 let textState=0;
 let xa=0;
-      let ya=0;
+let ya=0;
+let  lineXb,lineYb,lineXa,lineYa;
+let rectXa,rectYa,rectYb,rectXb,rectFlag=false;
 let imgImp = document.createElement("img");
 // history Store
 let history = {
@@ -91,6 +94,8 @@ function getSelector(select) {
     document.getElementById("fontSizeContainer").style.display="inline-block";
     // document.getElementById("fontSize2").style.display="block";
   
+  }else if(tool=="rect"){
+   // document.getElementsByName(canvas).style.cursor = "pointer";
   }
   
 
@@ -176,41 +181,126 @@ function Draw() {
         fs=fs+"px serif";
         console.log(fs)
         ctx.font =fs;
-       ctx.fillText(text,xa,ya-4);
-       // console.log(text,xa,ya);
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+       ctx.fillText(text,xa,ya);
+       socket.emit('TextEmit',({fs,text,xa,ya}));
+        console.log(text,xa,ya);
        document.getElementById("textarea").value="";
         textState=1;
       }else if(textState==3){
         // document.getElementById("textarea").value="";
         // textState=1;
+      }else if(tool=="rect" && rectFlag==true){
+        ctxrec = canvas.getContext("2d");
+        ctxrec.beginPath();
+     
+        rectXb=e.layerX;
+        rectYb=e.layerY;
+      
+         ctxrec.rect(rectXa, rectYa, rectXb-rectXa, rectYb-rectYa);
+        rectXb=rectXb-rectXa;
+        rectYb=rectYb-rectYa;
+        ctxrec.stroke();
+        socket.emit('rectEmit', { rectXa, rectYa,rectXb,rectYb});
+        console.log("hii i am rectangle",rectXb,rectYb,rectFlag);
+        rectFlag=false;
+      }else if(tool=="line"){
+        ctx.lineTo(e.layerX,e.layerY);
+         lineXb=e.layerX;
+         lineYb=e.layerY;
+        ctx.stroke();
+        socket.emit('lineEmit',{lineXa,lineYa,lineXb,lineYb});
+        console.log("line up");
       }
       history.saveState(canvas);
     //  console.log("save");
     }
     canvas.onmousedown=(e)=>{
       document.getElementById("sub-menu").style.display="none";
-    
+      if(tool=="rect"){
+        rectXa=e.layerX;
+        rectYa=e.layerY;
+        rectXb=0;
+        rectYb=0;
+        rectFlag=true;
+      }else if(tool=="line"){
+        ctx.moveTo(e.layerX,e.layerY);
+        lineXa=e.layerX;
+        lineYa=e.layerY;
+        console.log("line down");
+      }
     }
     window.onmouseup = (e) => {
 
-      socket.emit('draw', { x, y });
+      socket.emit('draw', { x, y,tool,penColor,penWidth});
 
       mouseDown = false;
     }
-    socket.on("ondraw", ({ x, y }) => {
+    // Realtime Event
+    socket.on("rectDraw",({x1,y1,x2,y2})=>{
+      ctx.beginPath();
+      ctx.rect(x1, y1, x2, y2);
+      ctx.stroke();
+      console.log("rect draw",x1,y1,x2,y2);
+    })
+    socket.on('lineDraw',({x1,y1,x2,y2})=>{
+      ctx.beginPath();
+ctx.moveTo(x1, y1);
+ctx.lineTo(x2, y2);
+ctx.stroke();
+console.log("line draw",xa,y1,x2,y2)
+    });
+
+    socket.on('TextDraw',({fs,xa,ya,text})=>{
+      ctx.font = fs;
+      ctx.fillText(text, xa, ya);
+      console.log("text Draw",fs,xa,ya,text);
+    })
+    socket.on("ondraw", ({ x, y,tool,pencolor,penwidth}) => {
+     switch(tool){
+     case "pen":
+      ctx.strokeStyle=pencolor;
+      ctx.lineWidth = penwidth;
       ctx.lineTo(x, y);
       ctx.stroke();
+     
+      break;
+    case "eraser":
+        ctx.strokeStyle ='#F2F2F2';
+        ctx.lineWidth = 50;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        console.log(tool,pencolor,penwidth);
+        break;
+    case "marker":
+          ctx.strokeStyle = "yellow";
+          ctx.globalCompositeOperation = "multiply";
+          ctx.lineWidth = 15;
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          ctx.lineTo(x, y);
+          ctx.stroke();
+          break;
+    default:
+      return;
+      
       //ctx.moveTo(x,y)
-
+     }
     })
 
-    socket.on("ondown", ({ x, y }) => {
-
+    socket.on("ondown", ({ x, y}) => {
+     console.log("break");
       ctx.moveTo(x, y)
 
     })
     canvas.onmousemove = (event) => {
-
+      if(tool=="rect" && rectFlag==true){
+       
+      
+      }else
       if (tool == "curser") {
         // if(draggable){
         //   currentX=event.layerX;
@@ -225,7 +315,7 @@ function Draw() {
 
         if (mouseDown) {
 
-          socket.emit('draw', { x, y });
+          socket.emit('draw', { x, y,tool,penColor,penWidth});
           document.body.style.cursor = "pointer";
           if (tool == "eraser") {
             ctx.strokeStyle ='#F2F2F2';
@@ -236,8 +326,11 @@ function Draw() {
 
             ctx.stroke();
           } else if (tool == "pen") {
-            ctx.strokeStyle = document.getElementById("color").value;
-            ctx.lineWidth = document.getElementById("thickness").value / 10;
+            penColor=document.getElementById("color").value;
+            ctx.strokeStyle =penColor;
+            penWidth=document.getElementById("thickness").value / 10;
+            if(penWidth==0) penWidth=1;
+            ctx.lineWidth = penWidth;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
             ctx.lineTo(x, y);
@@ -276,4 +369,25 @@ function Draw() {
   }
 
 
+}
+
+
+//downalod
+function downloadCanvasAsImage(){
+
+  let canvasImage = document.getElementById('canvas').toDataURL('image/png');
+
+  let xhr = new XMLHttpRequest();
+  xhr.responseType = 'blob';
+  xhr.onload = function () {
+      let a = document.createElement('a');
+      a.href = window.URL.createObjectURL(xhr.response);
+      a.download = 'image_name.png';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    };
+    xhr.open('GET', canvasImage); // This is to download the canvas Image
+    xhr.send();
 }
