@@ -15,3 +15,24 @@ function subMenuClose(){
     function closelink(){
         document.getElementById("link").style.display="none";
     }
+
+
+    function getURL(){
+        return window.location.href;
+    }
+    function fullscr(){
+        document.querySelector('.body').requestFullscreen({ navigationUI: 'show' }).then(function() {
+            document.getElementById('fullscr').style.display='none';
+            document.getElementById('exitscr').style.display='inline-block';
+        })
+        .catch(function(error) {
+            
+        });
+    }
+    function exitfullscr(){
+        if ( document.exitFullscreen) {
+            document.exitFullscreen();
+            document.getElementById('fullscr').style.display='inline-block';
+            document.getElementById('exitscr').style.display='none';
+          }
+    }

@@ -57,8 +57,8 @@ io.on('connection',(socket)=>{
     socket.on('StateEmit',(data)=>{
         connection.forEach((con)=>{
             if(con.id!=socket.id){
-                //console.warn("StateEmitted",data);
-                con.emit('StateDraw',({x1:data.lineXa,y1:data.lineYa,x2:data.lineXb,y2:data.lineYb}));
+            console.warn("StateEmitted",data);
+                con.emit('StateDraw',({restore_state:data.restore_state}));
             }
         })
     });

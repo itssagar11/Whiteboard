@@ -28,7 +28,8 @@
 
 <body onload="Draw() " class="body">
     <div class="shr-container">
-        <button onclick="openLink('eraser')"> <img src="icon/settings.png" width="25"> </button>
+        <button   id="fullscr" onclick="fullscr()"> <img src="icon/full-size.png" id="fullscr" class="tool"></button>
+        <button   id="exitscr" onclick="exitfullscr()"  style="display:none;"> <img src="icon/fullscreen.png" class="tool"></button>
         <button onclick="downloadCanvasAsImage()"> <img src="icon/cloud-computing.png" width="25"> </button>
         <button class="share" onclick="openLink()">Share</button>
 
@@ -37,7 +38,7 @@
     <div class="shr-container link" id="link">
         <button onclick="closelink()"><img src="icon/close.png" width="15"></button>
         <h3> WhiteBoard is batter when You are together</h3>
-        <input type="text" class="link-shr">
+        <input type="text" id="link-shr" value="getURL()">
         <p>Share this link with other people</p>
     </div>
     <div class="MenuBar">
@@ -55,13 +56,8 @@
         </label><br> -->
         <button onclick="undo()"><img src="icon/undo.png" width="25"></button><br>
         <button onclick="redo()"><img src="icon/redo.png" width="25"></button><br>
-        <button onclick="document.querySelector('.body').requestFullscreen({ navigationUI: 'show' }).then(function() {
-            
-        })
-        .catch(function(error) {
-            
-        });"> <img src="icon/full-size.png" class="tool"></button><br>
-    <button onclick="more()"><img src="icon/right-arrow.png"class="tool"></button><br>
+       <!-- // <br> -->
+    <!-- <button onclick="more()"><img src="icon/right-arrow.png"class="tool"></button><br> -->
     </div>
     <div class=" MenuBar sub-menu" id="sub-menu">
         <button class=""><img src="icon/close.png" width="20" onclick="subMenuClose()"></button><br>

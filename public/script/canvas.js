@@ -16,6 +16,7 @@ let ya=0;
 let  lineXb,lineYb,lineXa,lineYa;
 let rectXa,rectYa,rectYb,rectXb,rectFlag=false;
 let imgImp = document.createElement("img");
+let socket;
 // history Store
 let history = {
   redo_list: [],
@@ -37,18 +38,22 @@ let history = {
         this.undo_list.pop();
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         return
+      }else{
+        this.redo_list.push(canvas.toDataURL());
+        let restore_state = this.undo_list[(this.undo_list.length) - 2];
+        this.undo_list.pop();
+  
+        img = document.createElement("img");
+        img.src = restore_state;
+  
+        img.onload = function () {
+          ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+          ctx.drawImage(img, 0, 0,);
+          socket.emit('StateEmit',{restore_state});
+        }
       }
-      this.redo_list.push(canvas.toDataURL());
-      let restore_state = this.undo_list[(this.undo_list.length) - 2];
-      this.undo_list.pop();
-
-      img = document.createElement("img");
-      img.src = restore_state;
-
-      img.onload = function () {
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-        ctx.drawImage(img, 0, 0,);
-      }
+     
+     
     }
   },
 
@@ -68,6 +73,7 @@ let history = {
 
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       ctx.drawImage(img, 0, 0,);
+      socket.emit('StateEmit',{restore_state});
     }
   },
   redu: function (canvas, clk) {
@@ -133,7 +139,11 @@ function impInp(input) {
   }
 }
 
+function getURL(){
+  return window.location.href;
+}
 function Draw() {
+  document.getElementById("link-shr").value=getURL();
   canvas = document.getElementById("canvas");
   canvas.width = window.innerWidth + 500;
   canvas.height = window.innerHeight + 200;
@@ -147,7 +157,20 @@ function Draw() {
 
     ctx.lineCap = "round";
     let mouseDown = false;
-    let socket = io();
+     socket = io();
+
+     socket.on("StateDraw",({restore_state})=>{
+      let img= document.createElement("img");
+      img.src=restore_state;
+      img.onload = function () {
+        ctx.fillStyle="#f2f2f2";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+       ctx.drawImage(img, 0, 0,);
+      
+       console.log("statedraw",img);
+      }
+     
+    })
     window.onmousedown = (e) => {
       socket.emit('down', { x, y });
 
@@ -238,6 +261,7 @@ function Draw() {
       mouseDown = false;
     }
     // Realtime Event
+  
     socket.on("rectDraw",({x1,y1,x2,y2})=>{
       ctx.beginPath();
       ctx.rect(x1, y1, x2, y2);
@@ -296,6 +320,7 @@ console.log("line draw",xa,y1,x2,y2)
       ctx.moveTo(x, y)
 
     })
+   
     canvas.onmousemove = (event) => {
       if(tool=="rect" && rectFlag==true){
        

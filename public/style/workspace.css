@@ -8,6 +8,7 @@ body {
 
 
 }
+
 canvas{
   background-color: #F2F2F2;
   cursor: url("https://cdn2.iconfinder.com/data/icons/delivery-services-4/128/_click_online_shop_pointer_clicker_cursor_arrow_online_order_online_shop-512.png") 15 15, crosshair;
@@ -61,7 +62,7 @@ canvas{
     transition-delay: 1s;
    
 }
-input ,.fontSizeContainer{
+ .fontSizeContainer{
     display: none;
 }
 h3{
@@ -158,7 +159,12 @@ input[type="file"] {
 }
 .textarea{
    background-color: #F2F2F2;
-}@media only screen and (max-width: 600px) {
+}
+.link-shr{
+    display: "inline-block";
+}
+
+@media only screen and (max-width: 600px) {
     .tool{
         width: 50px;
         position: sticky;
