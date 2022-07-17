@@ -17,9 +17,6 @@ function subMenuClose(){
     }
 
 
-    function getURL(){
-        return window.location.href;
-    }
     function fullscr(){
         document.querySelector('.body').requestFullscreen({ navigationUI: 'show' }).then(function() {
             document.getElementById('fullscr').style.display='none';
