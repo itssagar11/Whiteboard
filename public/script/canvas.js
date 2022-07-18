@@ -1,5 +1,5 @@
 // globle Variable
-
+let ctximg;
 let workState = 0;
 let canvas;
 let tool = "pen";
@@ -10,6 +10,7 @@ let currentX = 0;
 let currentY = 0;
 let img
 let draggable = false;
+let startX,startY;
 let textState=0;
 let xa=0;
 let ya=0;
@@ -17,6 +18,8 @@ let  lineXb,lineYb,lineXa,lineYa;
 let rectXa,rectYa,rectYb,rectXb,rectFlag=false;
 let imgImp = document.createElement("img");
 let socket;
+let images=[];
+let current_img_index=0;
 // history Store
 let history = {
   redo_list: [],
@@ -85,7 +88,7 @@ let history = {
 function getSelector(select) {
   tool = select;
  // console.log(tool)
-  if (tool == "pen") { 
+  if (tool == "pen" || tool=="rect" || tool=="line") { 
     subMenuOpen();
     document.getElementById("fontSizeContainer").style.display="none";
     document.getElementById("color").style.display="inline-block";
@@ -120,9 +123,10 @@ function redo() {
 
 
 function impInp(input) {
+ 
   if (input.files && input.files[0]) {
     var reader = new FileReader();
-
+    console.warn(reader);
     reader.onload = function (e) {
       console.log(e.target.result);
 
@@ -130,23 +134,39 @@ function impInp(input) {
       imgImp.onload = function () {
         console.log("x and y is ", currentX, currentY);
 
-        ctx.drawImage(imgImp, currentX, currentY, imgImp.width / 2, imgImp.height / 2);
-
+       // ctx.drawImage(imgImp, currentX, currentY, imgImp.width / 2, imgImp.height / 2);
+       iw=(imgImp.width / 2);
+       ih=(imgImp.height / 2)
+        images.push({img:e.target.result,x:currentX,y:currentY,width:iw,height:ih});
+       
+        console.log(images);
+        //ctx.drawImage(imgImp, currentX, currentY ,iw,ih);
+        drowImage();
       }
+    
     };
-
     reader.readAsDataURL(input.files[0]);
   }
 }
 
+function drowImage(){
+  // ctx.clearRect(0, 0 ,canvas.width,canvas.height);
+  for(let i of images){
+    
+  let x= document.createElement('img');
+  x.src=i.img;
+ 
+    ctx.drawImage(x, i.x, i.y ,i.width,i.height);
+  }
+}
 function getURL(){
   return window.location.href;
 }
 function Draw() {
   document.getElementById("link-shr").value=getURL();
   canvas = document.getElementById("canvas");
-  canvas.width = window.innerWidth + 500;
-  canvas.height = window.innerHeight + 200;
+  canvas.width = window.innerWidth + 800;
+  canvas.height = window.innerHeight + 2500;
   currentX = canvas.width / 2;
   currentY = canvas.height / 2
   console.log(canvas.height)
@@ -176,9 +196,38 @@ function Draw() {
 
       mouseDown = true;
     }
-
+    canvas.onmouseout=(e)=>{
+     
+    }
     canvas.onmouseup = (e) => {
       console.log("d");
+      if(tool=="curser"){
+        if(!draggable){
+          return;
+        }
+        let trackImg=[];
+        if(draggable){
+          let mouseX=parseInt(e.layerX);
+          let mouseY=parseInt(e.layerY);
+          let dx=mouseX-startX;
+          let dy=mouseY-startY; 
+          ctx.clearRect(dx,dy, images[current_img_index].width, images[current_img_index].y);
+          //let curr_img=;
+          ctx.clearRect(images[current_img_index].x,  images[current_img_index].y , images[current_img_index].width, images[current_img_index].height);
+          images[current_img_index].x+=dx;
+          images[current_img_index].y+=dy;
+          
+          drowImage();
+          startX=mouseX;
+          startY=mouseY;
+          
+        console.log("cursor moving");
+        }
+        if(draggable){
+          draggable=false;
+        }
+        console.log("img draw")
+      }
       if(tool== "text" && textState==1){
         console.log("text");
         // ctx.font = '48px serif';
@@ -216,28 +265,52 @@ function Draw() {
         // textState=1;
       }else if(tool=="rect" && rectFlag==true){
         ctxrec = canvas.getContext("2d");
-        ctxrec.beginPath();
+        
      
         rectXb=e.layerX;
         rectYb=e.layerY;
-      
+    
+        ctxrec.beginPath();
+        penColor=document.getElementById("color").value;
+        penWidth=document.getElementById("thickness").value / 10;
+      console.log(penColor,penWidth)
+        ctxrec.strokeStyle=penColor;
+        ctxrec.lineWidth = penWidth;
          ctxrec.rect(rectXa, rectYa, rectXb-rectXa, rectYb-rectYa);
         rectXb=rectXb-rectXa;
         rectYb=rectYb-rectYa;
         ctxrec.stroke();
-        socket.emit('rectEmit', { rectXa, rectYa,rectXb,rectYb});
+        socket.emit('rectEmit', { rectXa, rectYa,rectXb,rectYb,penWidth,penColor});
         console.log("hii i am rectangle",rectXb,rectYb,rectFlag);
         rectFlag=false;
       }else if(tool=="line"){
+        penColor=document.getElementById("color").value;
+        penWidth=document.getElementById("thickness").value / 10;
+      console.log(penColor,penWidth)
+        ctx.strokeStyle=penColor;
+        ctx.lineWidth = penWidth;
         ctx.lineTo(e.layerX,e.layerY);
          lineXb=e.layerX;
          lineYb=e.layerY;
         ctx.stroke();
-        socket.emit('lineEmit',{lineXa,lineYa,lineXb,lineYb});
+        socket.emit('lineEmit',{lineXa,lineYa,lineXb,lineYb,penWidth,penColor});
         console.log("line up");
       }
       history.saveState(canvas);
     //  console.log("save");
+    }
+
+    function is_mouse_in_img(x,y,i){
+    
+        let img_left=i.x;
+        let img_right= i.x+i.width;
+        let img_top=i.y;
+        let img_bottom= i.y+i.height;
+        console.log(x,y,img_left,img_right,img_top,img_bottom);
+        if(x>img_left && x<img_right && y>img_top && y<img_bottom  ){
+          return true;
+        }
+        return false;
     }
     canvas.onmousedown=(e)=>{
       document.getElementById("sub-menu").style.display="none";
@@ -252,6 +325,22 @@ function Draw() {
         lineXa=e.layerX;
         lineYa=e.layerY;
         console.log("line down");
+      }else if(tool=="curser"){
+       
+        index=0;
+         startX= parseInt(e.layerX);
+         startY=parseInt(e.layerY);
+        for(let i of images){
+          if(is_mouse_in_img(startX,startY,i)){
+            console.log("yes")
+            draggable=true;
+            document.body.style.cursor ="all-scroll";
+            current_img_index=index;
+            return 
+          }
+           
+            index++;
+        }
       }
     }
     window.onmouseup = (e) => {
@@ -262,14 +351,18 @@ function Draw() {
     }
     // Realtime Event
   
-    socket.on("rectDraw",({x1,y1,x2,y2})=>{
+    socket.on("rectDraw",({x1,y1,x2,y2,width,color})=>{
       ctx.beginPath();
+      ctx.lineWidth = width;
+ctx.strokeStyle = color;
       ctx.rect(x1, y1, x2, y2);
       ctx.stroke();
       console.log("rect draw",x1,y1,x2,y2);
     })
-    socket.on('lineDraw',({x1,y1,x2,y2})=>{
+    socket.on('lineDraw',({x1,y1,x2,y2,width,color})=>{
       ctx.beginPath();
+      context.strokeStyle = color;
+      context.lineWidth =width;
 ctx.moveTo(x1, y1);
 ctx.lineTo(x2, y2);
 ctx.stroke();
@@ -327,10 +420,23 @@ console.log("line draw",xa,y1,x2,y2)
       
       }else
       if (tool == "curser") {
+        // if(!draggable){
+        //   return;
+        // }
+        // let trackImg=[];
         // if(draggable){
-        //   currentX=event.layerX;
-        // currentY=event.layerY;
-
+        //   let mouseX=parseInt(event.layerX);
+        //   let mouseY=parseInt(event.layerY);
+        //   let dx=mouseX-startX;
+        //   let dy=mouseY-startY; 
+        //   ctx.clearRect(dx,dy, images[current_img_index].width, images[current_img_index].y);
+        //   //let curr_img=;
+        //   images[current_img_index].x+=dx;
+        //   images[current_img_index].y+=dy;
+        //   drowImage();
+        //   startX=mouseX;
+        //   startY=mouseY;
+          
         // console.log("cursor moving");
         // }
 

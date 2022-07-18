@@ -33,7 +33,7 @@ io.on('connection',(socket)=>{
         connection.forEach((con)=>{
             if(con.id!=socket.id){
                // console.warn("RectEmitted");
-                con.emit('rectDraw',({x1:data.rectXa,y1:data.rectYa,x2:data.rectXb,y2:data.rectYb}));
+                con.emit('rectDraw',({x1:data.rectXa,y1:data.rectYa,x2:data.rectXb,y2:data.rectYb,width:data.width,color:data.color}));
             }
         })
     });
@@ -42,7 +42,7 @@ io.on('connection',(socket)=>{
         connection.forEach((con)=>{
             if(con.id!=socket.id){
               //  console.warn("lineEmitted",data);
-                con.emit('lineDraw',({x1:data.lineXa,y1:data.lineYa,x2:data.lineXb,y2:data.lineYb}));
+                con.emit('lineDraw',({x1:data.lineXa,y1:data.lineYa,x2:data.lineXb,y2:data.lineYb,width:data.penColor,color:data.penColor}));
             }
         })
     });
