@@ -165,8 +165,8 @@ function getURL(){
 function Draw() {
   document.getElementById("link-shr").value=getURL();
   canvas = document.getElementById("canvas");
-  canvas.width = window.innerWidth + 500;
-  canvas.height = window.innerHeight + 200;
+  canvas.width = window.innerWidth + 800;
+  canvas.height = window.innerHeight + 2500;
   currentX = canvas.width / 2;
   currentY = canvas.height / 2
   console.log(canvas.height)
